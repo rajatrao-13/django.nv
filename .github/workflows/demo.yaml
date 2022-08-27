@@ -7,22 +7,26 @@ on:
 
 jobs:
   build:
+    if: success()
     runs-on: ubuntu-latest                    # similar to "image" in GitLab
     steps:
       - run: echo "This is a build step"      # similar to "script" in GitLab
 
   test:
+    if: success()
     runs-on: ubuntu-latest
     steps:
       - run: echo "This is a test step"
 
   integration:
+    if = success()
     runs-on: ubuntu-latest
     steps:
       - run: echo "This is an integration step"
       - run: exit 1
 
   prod:
+    if = success()
     runs-on: ubuntu-latest
     steps:
       - run: echo "This is a deploy step"
