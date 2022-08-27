@@ -19,14 +19,14 @@ jobs:
       - run: echo "This is a test step"
 
   integration:
-    if = success()
+    if: success()
     runs-on: ubuntu-latest
     steps:
       - run: echo "This is an integration step"
       - run: exit 1
 
   prod:
-    if = success()
+    if: success()
     runs-on: ubuntu-latest
     steps:
       - run: echo "This is a deploy step"
