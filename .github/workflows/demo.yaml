@@ -24,6 +24,16 @@ jobs:
       - run: echo "This is an integration step"
       - run: exit 1
 
+  aritifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo hello /opt/hello.txt
+      - uses: actions/upload-artificat@v3
+        with: 
+	  name: my-artificat
+	  path: /opt/hello.txt
+  
   prod:
     needs: integration
     runs-on: ubuntu-latest
