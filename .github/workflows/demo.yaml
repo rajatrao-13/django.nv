@@ -25,14 +25,13 @@ jobs:
       - run: exit 1
 
   aritifact:
+    name: Upload File
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - run: echo hello > /opt/hello.txt
-     
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifacts@v1
         with: 
-	  name: my-artifact
+	  name: hello
 	  path: /opt/hello.txt
   
   prod:
