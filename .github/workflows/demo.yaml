@@ -15,7 +15,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: echo "This is a test step"
+      - run: echo "This is a testing step"
 
   integration:
     needs: test
