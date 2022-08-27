@@ -32,7 +32,7 @@ jobs:
       - image: python:3.6
     steps:
       - checkout
-      - run: echo "This is a deploy step"
+      - run: echo "This is a deploy step and welcome to CircleCI"
 
 workflows:
   version: 2
