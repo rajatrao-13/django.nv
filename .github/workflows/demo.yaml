@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: echo hello /opt/hello.txt
      
-      - uses: actions/upload-artificat@v3
+      - uses: actions/upload-artifact@v3
         with: 
 	  name: my-artificat
 	  path: /opt/hello.txt
