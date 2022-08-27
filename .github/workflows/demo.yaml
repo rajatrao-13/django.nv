@@ -28,11 +28,11 @@ jobs:
     name: Upload File
     runs-on: ubuntu-latest
     steps:
-      - run: echo hello > /opt/hello.txt
+      - run: echo "hello" > hello.txt
       - uses: actions/upload-artifact@v1
         with: 
 	  name: hello
-	  path: /opt/hello.txt
+	  path: hello.txt
   
   prod:
     needs: integration
