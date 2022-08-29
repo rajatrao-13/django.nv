@@ -17,18 +17,22 @@ jobs:
           pip install -r requirements.txt
           python manage.py test taskManager
 
-  oast:
-    machine: true
+  oast-frontend:
+    docker:
+      - image: node:current-alpine
     steps:
       - checkout
 
       - run:
-          command: docker run -v $(pwd):/src --rm hysnsec/safety check -r /src/requirements.txt --json | tee oast-results.json
+          command: |
+            npm install
+            npm install -g retire
+            retire --outputformat json --outputpath retirejs-report.json --severity high            
           when: on_fail             # Even if the job fails, continue to the next stages
 
       - store_artifacts:
-          path: oast-results.json
-          destination: safety-artifact
+          path: retirejs-report.json
+          destination: retirejs-artifact
           when: always
 
   integration:
