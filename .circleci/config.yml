@@ -23,12 +23,11 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          command: |
-            npm install
-            npm install -g retire
-            retire --outputformat json --outputpath retirejs-report.json --severity high            
-          when: on_fail             # Even if the job fails, continue to the next stages
+      - run: |
+          npm install
+          npm install -g retire
+          retire --outputformat json --outputpath retirejs-report.json --severity high            
+        when: on_fail             # Even if the job fails, continue to the next stages
 
       - store_artifacts:
           path: retirejs-report.json
