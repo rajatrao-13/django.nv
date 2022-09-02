@@ -51,8 +51,6 @@ jobs:
 
       - name: Install Snyk
       - run: wget -O /usr/local/bin/snyk https://github.com/snyk/cli/releases/download/v1.984.0/snyk-linux
-      
-      - name: Add permission to snyk
       - run: chmod +x /usr/local/bin/snyk
 
       - run: |
