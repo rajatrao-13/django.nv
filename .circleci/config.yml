@@ -17,23 +17,6 @@ jobs:
           pip install -r requirements.txt
           python manage.py test taskManager
 
-  oast-frontend:
-    docker:
-      - image: node:current-alpine
-    steps:
-      - checkout
-
-      - run: |
-          npm install
-          npm install -g retire
-          retire --outputformat json --outputpath retirejs-report.json --severity high            
-        when: on_fail             # Even if the job fails, continue to the next stages
-
-      - store_artifacts:
-          path: retirejs-report.json
-          destination: retirejs-artifact
-          when: always
-
   integration:
     docker:
       - image: python:3.6
@@ -43,14 +26,13 @@ jobs:
           command: |
             echo "This is an integration step"
             exit 1
-          when: on_fail                    # Even if the job fails, continue to the next stages
 
   prod:
     docker:
       - image: python:3.6
     steps:
       - checkout
-      - run: echo "This is a deploy step"
+      - run: echo "This is a deploy step."
 
 workflows:
   version: 2
@@ -59,13 +41,10 @@ workflows:
       - build
       - test:
           requires:
-            - build
-      - oast-frontend:
-          requires:
-            - test
+            - build 
       - integration:
           requires:
-            - oast-frontend
+            - test
       - prod:
           type: approval
           requires:
