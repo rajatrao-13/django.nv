@@ -22,8 +22,11 @@ jobs:
       - image: node:latest
     steps:
       - checkout
+
       - run:
           command: |
+            wget -O /usr/local/bin/snyk https://github.com/snyk/cli/releases/download/v1.984.0/snyk-linux
+            chmod +x /usr/local/bin/snyk
             snyk auth $SNYK_TOKEN
             export SNYK_TOKEN=$SNYK_TOKEN
             npm install 
