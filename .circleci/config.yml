@@ -17,6 +17,23 @@ jobs:
           pip install -r requirements.txt
           python manage.py test taskManager
 
+  oast-snyk:
+    docker: 
+      - image: node:latest
+    steps:
+      - checkout
+      - run:
+          command: |
+            snyk auth $SNYK_TOKEN
+            export SNYK_TOKEN=$SNYK_TOKEN
+            npm install 
+            snyk test --json > output.json
+          when: on_fail     
+      - store_artifacts:
+          path: output.json
+          destination: artifact
+          when: always
+
   integration:
     docker:
       - image: python:3.6
