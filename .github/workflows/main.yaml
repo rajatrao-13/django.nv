@@ -50,9 +50,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install Snyk
-      - run: |
+        run: |
          wget -O /usr/local/bin/snyk https://github.com/snyk/cli/releases/download/v1.984.0/snyk-linux
          chmod +x /usr/local/bin/snyk
+
+      - name: Run Snyk
+        run: |
          snyk auth ${{ secrets.SNYK_TOKEN }}
          export SNYK_TOKEN=${{ secrets.SNYK_TOKEN }}
          npm install 
