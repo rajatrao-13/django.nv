@@ -55,7 +55,7 @@ jobs:
       - name: Assign permmessions to snyk
         run: chmod +x /usr/local/bin/snyk
 
-        run: |
+      - run: |
          snyk auth ${{ secrets.SNYK_TOKEN }}
          export SNYK_TOKEN=${{ secrets.SNYK_TOKEN }}
          npm install 
