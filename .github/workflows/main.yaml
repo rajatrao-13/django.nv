@@ -60,6 +60,7 @@ jobs:
          npm install 
          snyk test --json > output.json
         continue-on-error: true
+
       - uses: actions/upload-artifact@v2
         with:
           name: Snyk Report
