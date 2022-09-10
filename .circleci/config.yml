@@ -17,7 +17,7 @@ jobs:
           pip install -r requirements.txt
           python manage.py test taskManager
 
-  zap_baseline:
+  zap-baseline:
     machine: true
     steps:
       - checkout
