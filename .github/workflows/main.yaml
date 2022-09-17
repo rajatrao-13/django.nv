@@ -19,6 +19,7 @@ jobs:
 
       - name: Run TFLint
         run: tflint -f json aws > tflint-output.json
+        continue-on-error: true 
 
       - uses: actions/upload-artifact@v2
         with:
