@@ -27,7 +27,7 @@ on:
 
   test:
     runs-on: ubuntu-latest
-    needs: build
+    needs: tflint
     steps:
       - run: echo "This is a test step"
 
