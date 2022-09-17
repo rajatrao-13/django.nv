@@ -5,6 +5,7 @@ on:
     branches:                                 # similar to "only" in GitLab
       - main
 
+jobs:   
   build:
     runs-on: ubuntu-latest
     steps:
