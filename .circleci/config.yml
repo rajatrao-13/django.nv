@@ -63,4 +63,5 @@ workflows:
       - test
       - integration
       - artifact
+      - sast
       - prod
