@@ -40,7 +40,7 @@ jobs:
       - image: python:3.6
     steps:
       - checkout
-      - run: echo "hello" > hello.txt
+      - run: echo "hello1" > hello.txt
       - store_artifacts:
           path: hello.txt
           destination: artifact-file
