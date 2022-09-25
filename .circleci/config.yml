@@ -41,11 +41,9 @@ jobs:
     machine: true
     steps:
       - checkout
-
       - run: 
           command: docker run --rm -v $(pwd):/src hysnsec/bandit -r /src -f json -o /src/bandit-output.json
           when: on_fail             # Even if the job fails, continue to the next stages
-
       - store_artifacts:
           path: bandit-output.json
           destination: bandit-artifact
