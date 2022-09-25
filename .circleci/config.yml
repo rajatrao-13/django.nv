@@ -38,15 +38,17 @@ jobs:
           destination: artifact-file
 
   sast:
-    runs-on: ubuntu-latest
+    machine: true
     steps:
-      - uses: actions/checkout@v2
+      - checkout
 
       - run: docker run --rm -v $(pwd):/src hysnsec/bandit -r /src -f json -o /src/bandit-output.json
-        continue-on-error: true             # allow the build to fail, similar to allow_failure: true
+        when: on_fail             # Even if the job fails, continue to the next stages
+
       - store_artifacts:
-          path: /src/bandit-output.json
-          destination: /src/bandit-output
+          path: bandit-output.json
+          destination: bandit-artifact
+          when: always
 
   prod:
     docker:
