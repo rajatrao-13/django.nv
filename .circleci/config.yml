@@ -37,7 +37,7 @@ jobs:
           path: hello.txt
           destination: artifact-file
 
-  sast:
+  sast-end:
     machine: true
     steps:
       - checkout
@@ -64,5 +64,5 @@ workflows:
       - test
       - integration
       - artifact
-      - sast
+      - sast-end
       - prod
