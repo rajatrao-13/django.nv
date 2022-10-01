@@ -53,7 +53,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: Nmap
-          path: nmap-output.json
+          path: nmap-output.xml
         if: always()                        # what is this for?
 
   integration:
