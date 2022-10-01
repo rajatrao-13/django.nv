@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: run --rm -v $(pwd):/tmp hysnsec/nmap prod-883bmt8p -oX /tmp/nmap-output.xml
+      - run: docker run --rm -v $(pwd):/tmp hysnsec/nmap prod-883bmt8p -oX /tmp/nmap-output.xml
         continue-on-error: true             # allow the build to fail, similar to allow_failure: true
 
       - uses: actions/upload-artifact@v2
