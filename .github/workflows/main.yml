@@ -62,7 +62,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: docker run --rm -v $(pwd):/tmp hysnsec/sslyze --regular prod-883bmt8p.lab.practical-devsecops.training:443 --json_out /tmp/sslyze-output.json
+      - run: docker run --rm -v $(pwd):/tmp hysnsec/sslyze prod-883bmt8p.lab.practical-devsecops.training:443 --json_out /tmp/sslyze-output.json
         continue-on-error: true             # allow the build to fail, similar to allow_failure: true
 
       - uses: actions/upload-artifact@v2
