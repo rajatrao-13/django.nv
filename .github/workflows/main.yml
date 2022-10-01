@@ -56,9 +56,39 @@ jobs:
           path: nmap-output.xml
         if: always()                        # what is this for?
 
+  sslscan:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: docker run --rm -v $(pwd):/tmp hysnsec/sslyze --regular prod-883bmt8p.lab.practical-devsecops.training:443 --json_out /tmp/sslyze-output.json
+        continue-on-error: true             # allow the build to fail, similar to allow_failure: true
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Sslyze
+          path: sslyze-output.json
+        if: always()    
+        
+  nikto:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: docker run --rm -v $(pwd):/tmp hysnsec/nikto -h http://prod-883bmt8p.lab.practical-devsecops.training -o /tmp/nikto-output.xml
+        continue-on-error: true             # allow the build to fail, similar to allow_failure: true
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Nikto
+          path: nikto-output.xml
+        if: always()      
+
   integration:
     runs-on: ubuntu-latest
-    needs: dast
+    needs: nikto
     steps:
       - run: echo "This is an integration step"
       - run: exit 1
