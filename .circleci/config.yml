@@ -1,4 +1,4 @@
- jobs:
+jobs:
   build:
     docker:
       - image: python:3.6                   # similar to "image" in GitLab
@@ -72,7 +72,7 @@
           destination: bandit-artifact
           when: always
 
- nmap:
+  nmap:
     machine: true
     steps:
       - checkout
@@ -85,7 +85,7 @@
           destination: nmap-artifact
           when: always
 
- sslscan:
+  sslscan:
     machine: true
     steps:
       - checkout
@@ -98,7 +98,7 @@
           destination: sslyze-artifact
           when: always
 
- nikto:
+  nikto:
     machine: true
     steps:
       - checkout
