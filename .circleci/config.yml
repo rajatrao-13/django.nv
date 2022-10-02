@@ -1,0 +1,182 @@
+jobs:
+  build:
+    docker:
+      - image: python:3.6                   # similar to "image" in GitLab
+    steps:
+      - checkout
+      - run: |                              # similar to "script" in GitLab
+          pip install -r requirements.txt
+          python manage.py check
+
+  test:
+    docker:
+      - image: python:3.6
+    steps:
+      - checkout
+      - run: |
+          pip install -r requirements.txt
+          python manage.py test taskManager
+
+  oast-frontend:
+    machine: true
+    steps:
+      - checkout
+
+      - run:
+          command: docker run --rm -v $(pwd):/src -w /src hysnsec/retire --outputformat json --outputpath retirejs-output.json --severity high
+          when: always             # Even if the job fails, continue to the next stages
+
+      - store_artifacts:
+          path: retirejs-output.json
+          destination: retirejs-artifact
+          when: always
+
+  oast-backend:
+    machine: true
+    steps:
+      - checkout
+
+      - run:
+          command: docker run -v $(pwd):/src --rm hysnsec/safety check -r /src/requirements.txt --json | tee oast-results.json
+          when: always             # Even if the job fails, continue to the next stages
+
+      - store_artifacts:
+          path: oast-results.json
+          destination: safety-artifact
+          when: always
+
+  secrets-scanning:
+    machine: true
+    steps:
+      - checkout
+
+      - run:
+          command: docker run --rm -v $(pwd):/src hysnsec/trufflehog file:///src --json > trufflehog-output.json
+          when: always             # Even if the job fails, continue to the next stages
+
+      - store_artifacts:
+          path: trufflehog-output.json
+          destination: trufflehog-artifact
+          when: always
+
+  sast:
+    machine: true
+    steps:
+      - checkout
+
+      - run: docker run --rm -v $(pwd):/src hysnsec/bandit -r /src -f json -o /src/bandit-output.json
+        when: always             # Even if the job fails, continue to the next stages
+
+      - store_artifacts:
+          path: bandit-output.json
+          destination: bandit-artifact
+          when: always
+
+ nmap:
+    machine: true
+    steps:
+      - checkout
+
+      - run: docker run --rm -v $(pwd):/tmp hysnsec/nmap prod-883bmt8p -oX /tmp/nmap-output.xml
+        when: always            # Even if the job fails, continue to the next stages
+
+      - store_artifacts:
+          path: nmap-output.xml
+          destination: nmap-artifact
+          when: always
+
+ sslscan:
+    machine: true
+    steps:
+      - checkout
+
+      - run: docker run --rm -v $(pwd):/tmp hysnsec/sslyze prod-883bmt8p.lab.practical-devsecops.training:443 --json_out /tmp/sslyze-output.json
+        when: always            # Even if the job fails, continue to the next stages
+
+      - store_artifacts:
+          path: sslyze-output.json
+          destination: sslyze-artifact
+          when: always
+
+ nikto:
+    machine: true
+    steps:
+      - checkout
+
+      - run: docker run --rm -v $(pwd):/tmp hysnsec/nikto -h http://prod-883bmt8p.lab.practical-devsecops.training -o /tmp/nikto-output.xml
+        when: always             # Even if the job fails, continue to the next stages
+
+      - store_artifacts:
+          path: nikto-output.json
+          destination: nikto-artifact
+          when: always
+
+  zap-baseline:
+    machine: true
+    steps:
+      - checkout
+
+      - run: |
+          docker pull owasp/zap2docker-stable:2.10.0
+          docker run --user root --rm -v $(pwd):/zap/wrk:rw -w /zap owasp/zap2docker-stable:2.10.0 zap-baseline.py -t ${PROD_URL} -J zap-output.json
+
+      - store_artifacts:
+          path: zap-output.json
+          destination: zap-artifact
+
+  integration:
+    docker:
+      - image: python:3.6
+    steps:
+      - checkout
+      - run:
+          command: |
+            echo "This is an integration step"
+            exit 1
+          when: on_fail         # Even if the job fails, continue to the next stages
+
+  prod:
+    docker:
+      - image: python:3.6
+    steps:
+      - checkout
+      - run: echo "This is a deploy step."
+ 
+workflows:
+  version: 2
+  django:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - oast-frontend:
+          requires:
+            - test
+      - oast-backend:
+          requires:
+            - oast-frontend
+      - secrets-scanning:
+          requires:
+            - oast-backend
+      - sast:
+          requires:
+            - oast-backend
+      - nmap:
+          requires:
+            - oast-backend
+      - sslscan:
+          requires:
+            - oast-backend
+      - nikto:
+          requires:
+            - oast-backend
+      - zap:
+          requires:
+            - oast-backend
+      - integration:
+          requires:
+            - zap
+      - prod:
+          requires:
+            - integration
