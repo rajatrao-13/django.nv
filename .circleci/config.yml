@@ -176,7 +176,7 @@ workflows:
             - oast-backend
       - integration:
           requires:
-            - zap
+            - zap-baseline
       - prod:
           requires:
             - integration
