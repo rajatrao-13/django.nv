@@ -1,4 +1,4 @@
-jobs:
+ jobs:
   build:
     docker:
       - image: python:3.6                   # similar to "image" in GitLab
