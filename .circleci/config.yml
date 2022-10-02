@@ -37,7 +37,7 @@ jobs:
       - checkout
 
       - run:
-          command: docker run -v $(pwd):/src --rm hysnsec/safety check -r /src/requirements.txt --json | tee oast-results.json
+          command: docker run -v $(pwd):/src --rm hysnsec/safety check -r /src/requirements.txt --json | tee oast-results.json || true
           when: always             # Even if the job fails, continue to the next stages
 
       - store_artifacts:
