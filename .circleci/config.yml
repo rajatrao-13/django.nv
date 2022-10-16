@@ -179,7 +179,7 @@
             - test
       - integration:
           requires:
-            - zap
+            - zap-baseline
       - prod:
           requires:
             - integration
