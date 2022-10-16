@@ -23,7 +23,7 @@
       - checkout
 
       - run:
-          command: docker run --rm -v $(pwd):/src -w /src hysnsec/retire --outputformat json --outputpath retirejs-output.json --severity high
+          command: docker run --rm -v $(pwd):/src -w /src hysnsec/retire --outputformat json --outputpath retirejs-output.json --severity high || true
           when: always             # Even if the job fails, continue to the next stages
 
       - store_artifacts:
@@ -37,7 +37,7 @@
       - checkout
 
       - run:
-          command: docker run -v $(pwd):/src --rm hysnsec/safety check -r /src/requirements.txt --json | tee oast-results.json
+          command: docker run -v $(pwd):/src --rm hysnsec/safety check -r /src/requirements.txt --json | tee oast-results.json || true
           when: always             # Even if the job fails, continue to the next stages
 
       - store_artifacts:
@@ -51,7 +51,7 @@
       - checkout
 
       - run:
-          command: docker run --rm -v $(pwd):/src hysnsec/trufflehog file:///src --json > trufflehog-output.json
+          command: docker run --rm -v $(pwd):/src hysnsec/trufflehog file:///src --json > trufflehog-output.json || true
           when: always             # Even if the job fails, continue to the next stages
 
       - store_artifacts:
@@ -64,7 +64,7 @@
     steps:
       - checkout
 
-      - run: docker run --rm -v $(pwd):/src hysnsec/bandit -r /src -f json -o /src/bandit-output.json
+      - run: docker run --rm -v $(pwd):/src hysnsec/bandit -r /src -f json -o /src/bandit-output.json || true
         when: always             # Even if the job fails, continue to the next stages
 
       - store_artifacts:
@@ -77,7 +77,7 @@
     steps:
       - checkout
 
-      - run: docker run --rm -v $(pwd):/tmp hysnsec/nmap prod-883bmt8p -oX /tmp/nmap-output.xml
+      - run: docker run --rm -v $(pwd):/tmp hysnsec/nmap prod-883bmt8p -oX /tmp/nmap-output.xml || true
         when: always            # Even if the job fails, continue to the next stages
 
       - store_artifacts:
@@ -90,7 +90,7 @@
     steps:
       - checkout
 
-      - run: docker run --rm -v $(pwd):/tmp hysnsec/sslyze prod-883bmt8p.lab.practical-devsecops.training:443 --json_out /tmp/sslyze-output.json
+      - run: docker run --rm -v $(pwd):/tmp hysnsec/sslyze prod-883bmt8p.lab.practical-devsecops.training:443 --json_out /tmp/sslyze-output.json || true
         when: always            # Even if the job fails, continue to the next stages
 
       - store_artifacts:
@@ -103,7 +103,7 @@
     steps:
       - checkout
 
-      - run: docker run --rm -v $(pwd):/tmp hysnsec/nikto -h http://prod-883bmt8p.lab.practical-devsecops.training -o /tmp/nikto-output.xml
+      - run: docker run --rm -v $(pwd):/tmp hysnsec/nikto -h http://prod-883bmt8p.lab.practical-devsecops.training -o /tmp/nikto-output.xml || true
         when: always             # Even if the job fails, continue to the next stages
 
       - store_artifacts:
@@ -118,7 +118,7 @@
 
       - run: |
           docker pull owasp/zap2docker-stable:2.10.0
-          docker run --user root --rm -v $(pwd):/zap/wrk:rw -w /zap owasp/zap2docker-stable:2.10.0 zap-baseline.py -t ${PROD_URL} -J zap-output.json
+          docker run --user root --rm -v $(pwd):/zap/wrk:rw -w /zap owasp/zap2docker-stable:2.10.0 zap-baseline.py -t ${PROD_URL} -J zap-output.json || ture
 
       - store_artifacts:
           path: zap-output.json
@@ -132,8 +132,7 @@
       - run:
           command: |
             echo "This is an integration step"
-            exit 1
-          when: on_fail         # Even if the job fails, continue to the next stages
+          when: always         # Even if the job fails, continue to the next stages
 
   prod:
     docker:
