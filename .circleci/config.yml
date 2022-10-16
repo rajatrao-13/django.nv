@@ -78,8 +78,9 @@
     steps:
       - checkout
 
-      - run: docker run --rm -v $(pwd):/tmp hysnsec/nmap prod-883bmt8p -oX /tmp/nmap-output.xml || true
-        when: always            # Even if the job fails, continue to the next stages
+      - run: 
+          command: docker run --rm -v $(pwd):/tmp hysnsec/nmap prod-883bmt8p -oX /tmp/nmap-output.xml || true
+          when: always            # Even if the job fails, continue to the next stages
 
       - store_artifacts:
           path: nmap-output.xml
@@ -91,8 +92,9 @@
     steps:
       - checkout
 
-      - run: docker run --rm -v $(pwd):/tmp hysnsec/sslyze prod-883bmt8p.lab.practical-devsecops.training:443 --json_out /tmp/sslyze-output.json || true
-        when: always            # Even if the job fails, continue to the next stages
+      - run: 
+          command: docker run --rm -v $(pwd):/tmp hysnsec/sslyze prod-883bmt8p.lab.practical-devsecops.training:443 --json_out /tmp/sslyze-output.json || true
+          when: always            # Even if the job fails, continue to the next stages
 
       - store_artifacts:
           path: sslyze-output.json
@@ -104,8 +106,9 @@
     steps:
       - checkout
 
-      - run: docker run --rm -v $(pwd):/tmp hysnsec/nikto -h http://prod-883bmt8p.lab.practical-devsecops.training -o /tmp/nikto-output.xml || true
-        when: always             # Even if the job fails, continue to the next stages
+      - run: 
+          command: docker run --rm -v $(pwd):/tmp hysnsec/nikto -h http://prod-883bmt8p.lab.practical-devsecops.training -o /tmp/nikto-output.xml || true
+          when: always             # Even if the job fails, continue to the next stages
 
       - store_artifacts:
           path: nikto-output.json
@@ -180,6 +183,9 @@
       - integration:
           requires:
             - zap-baseline
+            - nmap
+            - sslscan
+            - nikto
       - prod:
           requires:
             - integration
