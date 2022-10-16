@@ -170,7 +170,7 @@ jobs:
 
   integration:
     runs-on: ubuntu-latest
-    needs: [nikto, zap-baseline, nmap, sslscan]
+    needs: [nikto, zap_baseline, nmap, sslscan]
     steps:
       - run: echo "This is an integration step"
       - run: exit 1
