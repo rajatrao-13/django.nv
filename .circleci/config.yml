@@ -174,7 +174,7 @@
       - nikto:
           requires:
             - test
-      - zap:
+      - zap-baseline:
           requires:
             - test
       - integration:
