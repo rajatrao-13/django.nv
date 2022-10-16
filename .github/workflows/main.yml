@@ -91,7 +91,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: [sast, oast-frontend, oast-backend, secret-scanning]
+    needs: [sast, oast-frontend, oast-backend, secret_scanning]
     steps:
       - uses: actions/checkout@v2
 
