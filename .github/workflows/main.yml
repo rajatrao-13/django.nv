@@ -5,7 +5,8 @@ on:
     branches:                                 # similar to "only" in GitLab
       - master
   pull_request:
-    types: [opened, synchronize, reopened]
+   branches:                                 # similar to "only" in GitLab
+      - master
 
 jobs:
   sonarcloud:
