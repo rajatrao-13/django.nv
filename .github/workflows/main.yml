@@ -20,8 +20,8 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         with:
           args: >
-            -Dsonar.organization=my-organization
-            -Dsonar.projectKey=my-projectkey
+            -Dsonar.organization=tarabutgateway
+            -Dsonar.projectKey=tarabutgateway_dvwa-infosec-test-project-2
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=lib/
             -Dsonar.test.exclusions=tests/**
